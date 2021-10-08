@@ -17,6 +17,7 @@ public class App
 	private static String USER_DATA_DIR_BRAVE = "C:/Users/nguye/AppData/Local/BraveSoftware/Brave-Browser/User Data/";
 	private static String BRAVE_EXE = "C:/Program Files (x86)/BraveSoftware/Brave-Browser/Application/brave.exe";
 	private static String PROFILE = "Default";
+
     public static void main( String[] args ) throws InterruptedException
     {
     	System.out.println( "Tool start" );
