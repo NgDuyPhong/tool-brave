@@ -14,62 +14,37 @@ import org.openqa.selenium.chrome.ChromeOptions;
  */
 public class App 
 {
-	
-
-    public static void main( String[] args )
+	private static String USER_DATA_DIR_BRAVE = "C:/Users/nguye/AppData/Local/BraveSoftware/Brave-Browser/User Data/";
+	private static String BRAVE_EXE = "C:/Program Files (x86)/BraveSoftware/Brave-Browser/Application/brave.exe";
+	private static String PROFILE = "Default";
+    public static void main( String[] args ) throws InterruptedException
     {
-//        System.out.println( "Tool start" );
-//        try {
-//    	    Process p = Runtime.getRuntime().exec("C:/Program Files (x86)/BraveSoftware/Brave-Browser/Application/brave.exe --profile-directory=\"Default\"");
-////    	    p.waitFor();
-//    	    System.out.println("Brave launched!");
-//    	    WebDriver driver = new FirefoxDriver();
-////    	    JavascriptExecutor jse = (JavascriptExecutor)driver;
-////    	    jse.executeScript("location.reload(true);");
-//    	    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//    	    Actions action = new Actions(driver);
-//    	    action.keyDown(Keys.CONTROL).sendKeys(Keys.F5).keyUp(Keys.CONTROL).perform();
-////    	    JavascriptExecutor jse = (JavascriptExecutor)driver;
-////    	    jse.executeScript("location.reload(true);");
-//    	} catch (Exception e) {
-//    	    e.printStackTrace();
-//    	}
-    	
-//    	System.setProperty("webdriver.chrome.driver","D:\\Workspace\\JmeterWebdriverProject\\src\\lib\\chromedriver.exe");
-//    	ChromeOptions chromeOptions = new ChromeOptions();
-//    	chromeOptions.addArguments("--start-maximized");
-//    	WebDriver driver = new ChromeDriver(chromeOptions);
-//    	driver.get("https://www.google.co.in/");
-    	
-//    	ChromeOptions options = <strong>new</strong> ChromeOptions();
-//    	options.setBinary("/path/to/other/chrome/binary");
-//    	WebDriver driver = new ChromeDriver(options);
-    	
-    	
+    	System.out.println( "Tool start" );
 //        System.setProperty("webdriver.chrome.driver", "D:\\Code\\Java\\tool-brave\\chromedriver.exe");
-        
+ 
         //Initializing ChromeOptions Object
         ChromeOptions options = new ChromeOptions();
      
         //Setting Binary Path of Brave Browser in options object.
-        options.setBinary("C:/Program Files (x86)/BraveSoftware/Brave-Browser/Application/brave.exe");
-        options.addArguments("--user-data-dir=C:/Users/nguye/AppData/Local/BraveSoftware/Brave-Browser/User Data/");
-        options.addArguments("--profile-directory=Default");
+        options.setBinary(BRAVE_EXE);
+        options.addArguments("--user-data-dir=" + USER_DATA_DIR_BRAVE);
+        options.addArguments("--profile-directory=" + PROFILE);
+
         //Initializing Chrome Browser Instance
         WebDriver driver = new ChromeDriver(options);
-     
-        //Maximizing Browser
-     
-//        driver.manage().window().maximize();
-
-        //Launching https://abodeqa.com
-//        driver.get("https://www.google.com");
-     
-        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         Actions action = new Actions(driver);
+
 	    action.keyDown(Keys.CONTROL).sendKeys(Keys.F5).keyUp(Keys.CONTROL).perform();
-     
-//        driver.quit();
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	    // close browser brave
+        driver.quit();
     	System.out.println("done!");
     	
     }
