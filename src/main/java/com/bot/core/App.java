@@ -7,9 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -38,7 +36,6 @@ public class App
     		runTool(profile);
 		}
     	System.out.println("done!");
-    	
     }
     
     public static void runTool(String profileName) {
@@ -47,9 +44,13 @@ public class App
 	        //Initializing ChromeOptions Object
 	        ChromeOptions options = new ChromeOptions();
 	        for (int i = 0; i < 60; i++) {
+	    		System.out.println("Run Brave - " + profileName + ": " + (i + 1));
+
 	        	Thread.sleep(1000);
 	        	File dirFrom;
 	        	File dirTo;
+
+	        	// Copy file
 	        	for (String item : ARRAY_FILE) {
 	        		String strFrom = PATH_FILE_FROM + item;
 	            	String strTo = PATH_FILE_TO + profileName + ADS_SERVICE + item;
@@ -57,6 +58,7 @@ public class App
 	            	dirTo = new File(strTo);
 	            	copyFile(dirFrom, dirTo);
 				}
+	        	
 	        	Thread.sleep(500);
 		        //Setting Binary Path of Brave Browser in options object.
 		        options.setBinary(BRAVE_EXE);
@@ -68,11 +70,11 @@ public class App
 		        
 		        //Initializing Chrome Browser Instance
 		        WebDriver driver = new ChromeDriver(options);
+		        
 		        Thread.sleep(3000);
 		        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-		        Actions action = new Actions(driver);
 		        for (int j = 0; j < 23; j++) {
-		        	action.keyDown(Keys.CONTROL).sendKeys(Keys.F5).keyUp(Keys.CONTROL).perform();
+		        	driver.navigate().refresh();
 				}
 		        // close browser brave
 		        driver.quit();
@@ -87,11 +89,8 @@ public class App
     	try {
     		if (Files.exists(to.toPath())) {
     			Files.delete(to.toPath());
-    			Files.copy(from.toPath(), to.toPath());
-    		} else {
-    			Files.copy(from.toPath(), to.toPath());
     		}
-//    		Files.copy(from.toPath(), to.toPath());
+    		Files.copy(from.toPath(), to.toPath());
 		} catch (IOException e) {
 			// TODO: handle exception
 			e.printStackTrace();
