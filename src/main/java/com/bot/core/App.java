@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -29,35 +27,50 @@ public class App
 
 	private static String ADS_SERVICE = "/ads_service/";
 	private static String[] ARRAY_FILE = {"client.json", "database.sqlite", "database.sqlite-journal", "notifications.json"};
+	
+	private static String[] listProfileName = {
+			"Default",
+			"Profile 1",
+			"Profile 2",
+			"Profile 3",
+			"Profile 4",
+			"Profile 5",
+			"Profile 6",
+			"Profile 7",
+			"Profile 8",
+			"Profile 9",
+			"Profile 10",
+			"Profile 11",
+			"Profile 12",
+			"Profile 13",
+			"Profile 14",
+			"Profile 15"
+	};
 
     public static void main( String[] args ) {
     	System.out.println( "Tool start" );
-    	String[] listProfileName = {
-    			"Default",
-    			"Profile 1",
-    			"Profile 2",
-    			"Profile 3",
-    			"Profile 4",
-    			"Profile 5",
-    			"Profile 6",
-    			"Profile 7",
-    			"Profile 8",
-    			"Profile 9",
-    			"Profile 10",
-    			"Profile 11",
-    			"Profile 12",
-    			"Profile 13",
-    			"Profile 14",
-    			"Profile 15"
-    	};
-    	int i = 0;
-//    	while(i != 100) {
-//    		for (String profile : listProfileName) {
-//        		runTool(profile);
-//    		}
-//    		i++;
-//    	}
+    	try {
+    		tool();
+        	printSum();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("Please close all browser Brave and try again!");
+		}
     	
+    	System.out.println("done!");
+    }
+    
+    public static void tool() {
+    	int i = 0;
+    	while(i != 100) {
+    		for (String profile : listProfileName) {
+        		runTool(profile);
+    		}
+    		i++;
+    	}
+    }
+    
+    public static void printSum() {
     	float sum = 0;
     	// sum coin had
     	for (String profile : listProfileName) {
@@ -65,8 +78,6 @@ public class App
     		System.out.println(sum);
 		}
     	System.out.println("Sum coin: " + sum);
-
-    	System.out.println("done!");
     }
     
     public static float countCoin(String profileName) {
