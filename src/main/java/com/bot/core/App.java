@@ -119,16 +119,6 @@ public class App
 		         
 		        options.setCapability("requireWindowFocus", false);
 		        options.addArguments("--start-minimized");
-//		        options.addArguments(2000, 0)
-//		        options.addArguments("--headless");
-//		        System.setProperty( "phantomjs.binary.path", "D:/Code/Java/tool-brave/phantomjs-2.1.1-windows/bin/phantomjs.exe" );
-		        
-//		        options.addArguments("--incognito");
-//		        options.addArguments("headless");
-//		        options.setHeadless(true);
-		        Map<String, Object> prefs = new HashMap<String, Object>();
-		        prefs.put("profile.exit_type", "Normal");
-		        options.setExperimentalOption("prefs", prefs);
 
 		        //Initializing Chrome Browser Instance
 		        WebDriver driver = new ChromeDriver(options);
@@ -141,8 +131,7 @@ public class App
 	            	dirTo = new File(strTo);
 	            	copyFile(dirFrom, dirTo);
 				}
-		        
-//		        WebDriver driver = new PhantomJSDriver(options);
+
 		        WebElement el = driver.findElement(By.className("Amount-sc-ejzzb7"));
 		        String amountBeff = el.getAttribute("innerHTML");
 		        String amount = amountBeff;
@@ -156,7 +145,6 @@ public class App
 		        		el = driver.findElement(By.className("Amount-sc-ejzzb7"));
 			        	amount = el.getAttribute("innerHTML");
 		        	}
-//		        	System.out.println(el.getAttribute("innerHTML"));
 		        }
 		        System.out.println("Amount end: " + amount);
 		        if (Float.parseFloat(amountBeff) == Float.parseFloat(amount)) {
