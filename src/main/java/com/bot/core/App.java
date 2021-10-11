@@ -3,8 +3,6 @@ package com.bot.core;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -51,7 +49,7 @@ public class App
     	System.out.println( "Tool start" );
     	try {
     		tool();
-        	printSum();
+//        	printSum();
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.err.println("Please close all browser Brave and try again!");
@@ -63,6 +61,7 @@ public class App
     public static void tool() {
     	int i = 0;
     	while(i != 100) {
+    		System.out.println("Run number: " + ++i);
     		for (String profile : listProfileName) {
         		runTool(profile);
     		}
@@ -75,7 +74,7 @@ public class App
     	// sum coin had
     	for (String profile : listProfileName) {
     		sum += countCoin(profile);
-    		System.out.println(sum);
+    		System.out.println(profile + ": " + sum);
 		}
     	System.out.println("Sum coin: " + sum);
     }
@@ -98,6 +97,7 @@ public class App
     
     public static void runTool(String profileName) {
     	try {
+    		float sumChange = 0;
 	    	Thread.sleep(500);
 	        //Initializing ChromeOptions Object
 	        ChromeOptions options = new ChromeOptions();
@@ -155,8 +155,12 @@ public class App
 			        	driver.quit();
 			        	break;
 			        }
-		        } else flagForBeff = 0;
-		        
+		        } else {
+		        	sumChange += Float.parseFloat(amount) - Float.parseFloat(amountBeff);
+		        	flagForBeff = 0;
+		        }
+		        System.out.println("All coin change same: " + sumChange);
+
 		        // close browser brave
 		        driver.quit();
 			}
