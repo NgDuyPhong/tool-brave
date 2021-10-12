@@ -45,14 +45,30 @@ public class App
 			"Profile 12",
 			"Profile 13",
 			"Profile 14",
-			"Profile 15"
+			"Profile 15",
+			"Profile 16",
+			"Profile 17",
+			"Profile 18",
+			"Profile 19",
+			"Profile 20",
+			"Profile 21",
+			"Profile 22",
+			"Profile 23",
+			"Profile 24",
+			"Profile 25",
+			"Profile 26",
+			"Profile 27",
+			"Profile 28",
+			"Profile 29",
+			"Profile 30"
 	};
 
 	public static void main(String[] args) {
 		System.out.println("Tool start");
 		try {
-    		tool();
-//			printSum();
+//    		tool();
+			printSum(true); // count Coin
+//			printSum(false); // count USD
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -72,30 +88,36 @@ public class App
 		}
 	}
 
-	public static void printSum() {
+	public static void printSum(boolean isCoin) {
+		Logger logger = Logger.getLogger("");
+		logger.setLevel(Level.OFF);
 		float sum = 0;
 		float count = 0;
 		// sum coin had
+		String strUnit = isCoin ? "BAT" : "USD";
 		for (String profile : listProfileName) {
-			count = countCoin(profile);
+			count = countCoin(profile, isCoin);
 			sum += count;
 			System.out.println(profile + ": " + count);
-			System.out.println("Sum: " + sum);
+			System.out.println("Sum " + strUnit + ": " + sum + " (" + strUnit + ")");
 		}
-		System.out.println("Sum coin: " + sum);
 	}
 
-	public static float countCoin(String profileName) {
+	public static float countCoin(String profileName, boolean isCoin) {
 		ChromeOptions options = new ChromeOptions();
 		options.setBinary(BRAVE_EXE);
 		options.addArguments("--user-data-dir=" + USER_DATA_DIR_BRAVE);
 		options.addArguments("--profile-directory=" + profileName);
-		options.addArguments("--window-position=-10000,-1000");
+		options.addArguments("--window-position=-1000,-1000");
 		options.addArguments("--window-size=0,0");
+		System.setProperty("webdriver.chrome.silentOutput", "true");
 		WebDriver driver = new ChromeDriver(options);
-
-		WebElement el = driver.findElement(By.className("Amount-sc-ejzzb7"));
-		String amount = el.getAttribute("innerHTML");
+		WebElement el;
+		if (isCoin) {
+			el = driver.findElement(By.className("Amount-sc-ejzzb7"));
+		} else el = driver.findElement(By.className("AmountUSD-sc-1qi3gv"));
+		
+		String amount = el.getAttribute("innerHTML").replace(" USD", "");
 		float FlAmount = Float.parseFloat(amount);
 		driver.quit();
 		return FlAmount;
