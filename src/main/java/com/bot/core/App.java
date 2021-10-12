@@ -71,8 +71,10 @@ public class App
 //			printSum(false); // count USD
 		} catch (Exception e) {
 			// TODO: handle exception
-			e.printStackTrace();
+//			e.printStackTrace();
+			System.err.println("#################################################");
 			System.err.println("Please close all browser Brave and try again!");
+			System.err.println("#################################################");
 		}
 		System.out.println("done!");
 	}
@@ -137,14 +139,14 @@ public class App
 			String amount = "0";
 			String strFrom = "";
 			String strTo = "";
+			System.out.println("");
 			for (int i = 0; i < 60; i++) {
-				System.out.println("");
 				System.out.println("Run Brave - " + profileName + ": " + (i + 1));
 
 				Thread.sleep(500);
 				File dirFrom;
 				File dirTo;
-				
+
 				// Copy file
 				for (String item : ARRAY_FILE) {
 					strFrom = PATH_FILE_FROM + item;
@@ -159,7 +161,7 @@ public class App
 				options.setBinary(BRAVE_EXE);
 				options.addArguments("--user-data-dir=" + USER_DATA_DIR_BRAVE);
 				options.addArguments("--profile-directory=" + profileName);
-				options.addArguments("--window-position=-10000,-1000");
+				options.addArguments("--window-position=-1000,-1000");
 				options.addArguments("--window-size=0,0");
 
 				options.setCapability("requireWindowFocus", false);
