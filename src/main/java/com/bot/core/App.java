@@ -69,7 +69,6 @@ public class App
 			for (String profile : listProfileName) {
 				runTool(profile);
 			}
-			i++;
 		}
 	}
 
@@ -120,6 +119,15 @@ public class App
 				Thread.sleep(500);
 				File dirFrom;
 				File dirTo;
+				
+				// Copy file
+				for (String item : ARRAY_FILE) {
+					strFrom = PATH_FILE_FROM + item;
+					strTo = PATH_FILE_TO + profileName + ADS_SERVICE + item;
+					dirFrom = new File(strFrom);
+					dirTo = new File(strTo);
+					copyFile(dirFrom, dirTo);
+				}
 
 				Thread.sleep(500);
 				// Setting Binary Path of Brave Browser in options object.
@@ -130,19 +138,9 @@ public class App
 				options.addArguments("--window-size=0,0");
 
 				options.setCapability("requireWindowFocus", false);
-				options.addArguments("--start-minimized");
 				System.setProperty("webdriver.chrome.silentOutput", "true");
 				// Initializing Chrome Browser Instance
 				WebDriver driver = new ChromeDriver(options);
-				
-				// Copy file
-				for (String item : ARRAY_FILE) {
-					strFrom = PATH_FILE_FROM + item;
-					strTo = PATH_FILE_TO + profileName + ADS_SERVICE + item;
-					dirFrom = new File(strFrom);
-					dirTo = new File(strTo);
-					copyFile(dirFrom, dirTo);
-				}
 
 				WebElement el = driver.findElement(By.className("Amount-sc-ejzzb7"));
 				amountBeff = el.getAttribute("innerHTML");
@@ -175,7 +173,7 @@ public class App
 					sumChange += Float.parseFloat(amount) - Float.parseFloat(amountBeff);
 					flagForBeff = 0;
 				}
-				System.out.println("All coin change same: " + sumChange);
+				System.out.println("All coin change: " + sumChange);
 
 				// close browser brave
 				driver.quit();
