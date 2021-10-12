@@ -66,8 +66,8 @@ public class App
 	public static void main(String[] args) {
 		System.out.println("Tool start");
 		try {
-//    		tool();
-			printSum(true); // count Coin
+    		tool(); // run tool
+//			printSum(true); // count Coin
 //			printSum(false); // count USD
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -93,14 +93,16 @@ public class App
 		logger.setLevel(Level.OFF);
 		float sum = 0;
 		float count = 0;
-		// sum coin had
 		String strUnit = isCoin ? "BAT" : "USD";
+		// sum
 		for (String profile : listProfileName) {
 			count = countCoin(profile, isCoin);
 			sum += count;
 			System.out.println(profile + ": " + count);
 			System.out.println("Sum " + strUnit + ": " + sum + " (" + strUnit + ")");
 		}
+		System.out.println("---------------------------------------------");
+		System.out.println("Sum " + strUnit + ": " + sum + " (" + strUnit + ")");
 	}
 
 	public static float countCoin(String profileName, boolean isCoin) {
@@ -136,6 +138,7 @@ public class App
 			String strFrom = "";
 			String strTo = "";
 			for (int i = 0; i < 60; i++) {
+				System.out.println("");
 				System.out.println("Run Brave - " + profileName + ": " + (i + 1));
 
 				Thread.sleep(500);
