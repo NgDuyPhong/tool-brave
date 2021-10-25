@@ -3,6 +3,8 @@ package com.bot.core;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,60 +21,60 @@ import org.openqa.selenium.chrome.ChromeOptions;
  */
 public class App 
 {
-//	C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe\BraveSoftware\Brave-Browser\Application\brave.exe --window-position=50,50 --window-size=300,300
 	private static String USER_DATA_DIR_BRAVE = "C:/Users/nguye/AppData/Local/BraveSoftware/Brave-Browser/User Data/";
 	private static String PATH_FILE_FROM = "D:/Code/Freelancer/brave-tool/FullCombo/5555/";
 	private static String PATH_FILE_TO = "C:/Users/nguye/AppData/Local/BraveSoftware/Brave-Browser/User Data/";
 	private static String BRAVE_EXE = "C:/Program Files (x86)/BraveSoftware/Brave-Browser/Application/brave.exe";
-
+	private static int stopLoop = 100;
+	
 	private static String ADS_SERVICE = "/ads_service/";
 	private static String[] ARRAY_FILE = {"client.json", "database.sqlite", "database.sqlite-journal", "notifications.json"};
 	private static float sumChange = 0;
 
 	private static String[] listProfileName = {
-			"Default",
-			"Profile 1",
-			"Profile 2",
-			"Profile 3",
-			"Profile 4",
-			"Profile 5",
-			"Profile 6",
-			"Profile 7",
-			"Profile 8",
-			"Profile 9",
+//			"Default",
+//			"Profile 1",
+//			"Profile 2",
+//			"Profile 3",
+//			"Profile 4",
+//			"Profile 5",
+//			"Profile 6",
+//			"Profile 7",
+//			"Profile 8",
+//			"Profile 9",
 			"Profile 10",
 			"Profile 11",
 			"Profile 12",
 			"Profile 13",
 			"Profile 14",
 			"Profile 15",
-			"Profile 16",
-			"Profile 17",
-			"Profile 18",
-			"Profile 19",
-			"Profile 20",
-			"Profile 21",
-			"Profile 22",
-			"Profile 23",
-			"Profile 24",
-			"Profile 25",
-			"Profile 26",
-			"Profile 27",
-			"Profile 28",
-			"Profile 29",
-			"Profile 30"
+//			"Profile 16",
+//			"Profile 17",
+//			"Profile 18",
+//			"Profile 19",
+//			"Profile 20",
+//			"Profile 21",
+//			"Profile 22",
+//			"Profile 23",
+//			"Profile 24",
+//			"Profile 25",
+//			"Profile 26",
+//			"Profile 27",
+//			"Profile 28",
+//			"Profile 29",
+//			"Profile 30",
 	};
 
 	public static void main(String[] args) {
 		System.out.println("Tool start");
 		try {
-    		tool(); // run tool
-//			printSum(true); // count Coin
-//			printSum(false); // count USD
+//    		tool(); // run tool
+			printSum(); // count coin - USD
 		} catch (Exception e) {
 			// TODO: handle exception
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("#################################################");
+			System.err.println("Sorry, Something went wrong!");
 			System.err.println("Please close all browser Brave and try again!");
 			System.err.println("#################################################");
 		}
@@ -81,7 +83,7 @@ public class App
 
 	public static void tool() {
 		int i = 0;
-		while (i != 100) {
+		while (i != stopLoop) {
 			System.out.println("---------------------------------------------");
 			System.out.println("Run number: " + ++i);
 			for (String profile : listProfileName) {
@@ -90,41 +92,48 @@ public class App
 		}
 	}
 
-	public static void printSum(boolean isCoin) {
+	public static void printSum() {
 		Logger logger = Logger.getLogger("");
+		System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		logger.setLevel(Level.OFF);
-		float sum = 0;
-		float count = 0;
-		String strUnit = isCoin ? "BAT" : "USD";
+		float sumCoin = 0;
+		float sumUsd = 0;
+		float countCoin = 0;
+		float countUsd = 0;
 		// sum
 		for (String profile : listProfileName) {
-			count = countCoin(profile, isCoin);
-			sum += count;
-			System.out.println(profile + ": " + count);
-			System.out.println("Sum " + strUnit + ": " + sum + " (" + strUnit + ")");
+			countCoin = countCoin(profile)[0];
+			countUsd = countCoin(profile)[1];
+			sumCoin += countCoin;
+			sumUsd += countUsd;
+			System.out.println(profile + ":");
+			System.out.println("BAT: " + countCoin + " - | - " + "USD: " + countUsd);
+			System.out.println("Sum BAT: " + sumCoin + " (BAT) - | - Sum USD: " + sumUsd + " (USD)");
 		}
 		System.out.println("---------------------------------------------");
-		System.out.println("Sum " + strUnit + ": " + sum + " (" + strUnit + ")");
+		System.out.println("Sum BAT: " + sumCoin + " (BAT) - | - Sum USD: " + sumUsd + " (USD)");
 	}
 
-	public static float countCoin(String profileName, boolean isCoin) {
+	public static float[] countCoin(String profileName) {
 		ChromeOptions options = new ChromeOptions();
 		options.setBinary(BRAVE_EXE);
 		options.addArguments("--user-data-dir=" + USER_DATA_DIR_BRAVE);
 		options.addArguments("--profile-directory=" + profileName);
+		// hiden browser
 		options.addArguments("--window-position=-1000,-1000");
 		options.addArguments("--window-size=0,0");
+
 		System.setProperty("webdriver.chrome.silentOutput", "true");
 		WebDriver driver = new ChromeDriver(options);
-		WebElement el;
-		if (isCoin) {
-			el = driver.findElement(By.className("Amount-sc-ejzzb7"));
-		} else el = driver.findElement(By.className("AmountUSD-sc-1qi3gv"));
-		
+		WebElement el = driver.findElement(By.className("Amount-sc-ejzzb7"));
 		String amount = el.getAttribute("innerHTML").replace(" USD", "");
-		float FlAmount = Float.parseFloat(amount);
+		float FlAmountCoin = Float.parseFloat(amount);
+		el = driver.findElement(By.className("AmountUSD-sc-1qi3gv"));
+		amount = el.getAttribute("innerHTML").replace(" USD", "");
+		float FlAmountUsd = Float.parseFloat(amount);
 		driver.quit();
-		return FlAmount;
+		float[] arrRs = {FlAmountCoin, FlAmountUsd};
+		return arrRs;
 	}
 
 	public static void runTool(String profileName) {
@@ -140,6 +149,7 @@ public class App
 			String strFrom = "";
 			String strTo = "";
 			System.out.println("");
+			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			for (int i = 0; i < 60; i++) {
 				System.out.println("Run Brave - " + profileName + ": " + (i + 1));
 
@@ -161,14 +171,15 @@ public class App
 				options.setBinary(BRAVE_EXE);
 				options.addArguments("--user-data-dir=" + USER_DATA_DIR_BRAVE);
 				options.addArguments("--profile-directory=" + profileName);
+				// hiden browser
 				options.addArguments("--window-position=-1000,-1000");
-				options.addArguments("--window-size=0,0");
+				options.addArguments("--window-size=500,500");
 
 				options.setCapability("requireWindowFocus", false);
 				System.setProperty("webdriver.chrome.silentOutput", "true");
 				// Initializing Chrome Browser Instance
 				WebDriver driver = new ChromeDriver(options);
-
+				
 				WebElement el = driver.findElement(By.className("Amount-sc-ejzzb7"));
 				amountBeff = el.getAttribute("innerHTML");
 				if (Float.parseFloat(amountBeff) < Float.parseFloat(amount)) {
@@ -177,14 +188,17 @@ public class App
 				amount = amountBeff;
 				System.out.println("Amount start: " + amountBeff);
 				Thread.sleep(500);
-				driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+				driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 				for (int j = 0; j < 23; j++) {
-					Thread.sleep(250);
+					Thread.sleep(500);
 					driver.navigate().refresh();
 					if (j == 22) {
 						el = driver.findElement(By.className("Amount-sc-ejzzb7"));
 						amount = el.getAttribute("innerHTML");
 					}
+				}
+				if (Float.parseFloat(amount) < Float.parseFloat(amountBeff)) {
+					amount = amountBeff;
 				}
 				System.out.println("Amount end: " + amount);
 				if (Float.parseFloat(amountBeff) == Float.parseFloat(amount)) {
